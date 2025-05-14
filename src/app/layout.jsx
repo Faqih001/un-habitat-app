@@ -2,7 +2,7 @@ import { Inter, Poppins, Roboto_Mono } from 'next/font/google';
 import ThemeProvider from '../components/layout/ThemeProvider';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import './globals.css';
+import './styles/tailwind.css';
 
 // Load fonts
 const inter = Inter({

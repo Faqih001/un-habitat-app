@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* This file contains additional global styles */
+/* The Tailwind directives are now in styles/tailwind.css */
 
 /* Base theme variables */
 :root {

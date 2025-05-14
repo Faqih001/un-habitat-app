@@ -7,6 +7,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* UN-Habitat theme variables */
+  --un-blue: #009edb;
+  --un-dark-blue: #0077b6;
+  --un-light-blue: #e1f5fe;
+  
+  /* Animation durations */
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 350ms;
 }
 
 /* Custom variables */
