@@ -1,0 +1,24 @@
+/* Base Tailwind styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root variables */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Custom variables */
+:root {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
