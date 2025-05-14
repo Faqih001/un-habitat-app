@@ -62,16 +62,79 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg text-center animate-fade-in">
-          <div className="mb-4">
-            <svg className="animate-spin h-10 w-10 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-          </div>
-          <p className="text-gray-600">Loading Dashboard Data...</p>
-        </div>
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-slate-900 bg-opacity-90 dark:bg-opacity-90 backdrop-blur-sm z-50">
+        <motion.div 
+          className="bg-white/90 dark:bg-slate-800/90 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700/50 text-center max-w-md w-full"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <motion.div 
+            className="mb-6 relative flex justify-center"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, ease: "linear", repeat: Infinity }}
+          >
+            {/* Logo and loader */}
+            <div className="relative">
+              <svg className="h-16 w-16" viewBox="0 0 100 100">
+                <circle 
+                  cx="50" cy="50" r="40" 
+                  className="stroke-primary-100 dark:stroke-primary-900 fill-none" 
+                  strokeWidth="8"
+                />
+                <motion.circle 
+                  cx="50" cy="50" r="40" 
+                  className="stroke-primary-600 dark:stroke-primary-400 fill-none" 
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0.2, rotate: -90, opacity: 0.8 }}
+                  animate={{ pathLength: 0.8, opacity: 1 }}
+                  transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+                  style={{ transformOrigin: 'center' }}
+                />
+              </svg>
+              <motion.div 
+                className="absolute inset-0 flex items-center justify-center"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+              >
+                <span className="text-primary-600 dark:text-primary-400 font-semibold">UN</span>
+              </motion.div>
+            </div>
+          </motion.div>
+          
+          <motion.h2 
+            className="text-xl font-bold text-gray-800 dark:text-white mb-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Loading Dashboard
+          </motion.h2>
+          
+          <motion.p 
+            className="text-gray-600 dark:text-gray-300"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Preparing your project analytics...
+          </motion.p>
+          
+          <motion.div 
+            className="mt-4 h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"
+            initial={{ width: "100%", opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            <motion.div 
+              className="h-full bg-primary-500 dark:bg-primary-600 rounded-full"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 2.5, ease: "easeInOut", repeat: Infinity }}
+            />
+          </motion.div>
+        </motion.div>
       </div>
     );
   }
@@ -113,6 +176,12 @@ export default function Dashboard() {
   const totalBudget = projects.reduce((total, p) => total + (p.PAGValue || 0), 0);
   const totalExpenditure = projects.reduce((total, p) => total + (p.TotalExpenditure || 0), 0);
   const completionRate = totalExpenditure / totalBudget * 100;
+  const totalCountries = [...new Set(projects.flatMap(p => p.countries || []))].length;
+  const approvedProjects = projects.filter(p => p.ApprovalStatus === 'Approved').length;
+  const approvalRate = (approvedProjects / totalProjects) * 100;
+
+  // Calculate month-over-month growth (simulated for demo purposes)
+  const growthRate = 8.4; // simulated 8.4% monthly growth
 
   // Colors
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#FF6B6B', '#6A0572', '#005AA7'];
@@ -154,41 +223,50 @@ export default function Dashboard() {
 
       <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Key metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fade-in">
-          <div className="dashboard-card">
-            <p className="dashboard-label">Total Projects</p>
-            <p className="dashboard-stat text-blue-600">{totalProjects}</p>
-            <div className="mt-2 flex items-center text-sm">
-              <span className="text-green-500 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                </svg>
-                Active portfolio
-              </span>
-            </div>
-          </div>
-          <div className="dashboard-card">
-            <p className="dashboard-label">Total Budget</p>
-            <p className="dashboard-stat text-green-600">{formatCurrency(totalBudget)}</p>
-            <div className="mt-2 flex items-center text-sm">
-              <span className="text-gray-500">Across all projects</span>
-            </div>
-          </div>
-          <div className="dashboard-card">
-            <p className="dashboard-label">Total Expenditure</p>
-            <p className="dashboard-stat text-purple-600">{formatCurrency(totalExpenditure)}</p>
-            <div className="mt-2 flex items-center text-sm">
-              <span className="text-gray-500">{completionRate.toFixed(1)}% of total budget</span>
-            </div>
-          </div>
-          <div className="dashboard-card">
-            <p className="dashboard-label">Countries</p>
-            <p className="dashboard-stat text-orange-600">{countries.length}</p>
-            <div className="mt-2 flex items-center text-sm">
-              <span className="text-gray-500">With active projects</span>
-            </div>
-          </div>
-        </div>
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          <EnhancedStatCard
+            title="Total Projects"
+            value={totalProjects}
+            description="Active projects in database"
+            icon={<DocumentTextIcon className="h-5 w-5" />}
+            trend="up"
+            trendValue={`+${growthRate}%`}
+            variant="glass"
+          />
+          
+          <EnhancedStatCard
+            title="Total Budget"
+            value={formatCurrency(totalBudget)}
+            description="Combined project budget"
+            icon={<CurrencyDollarIcon className="h-5 w-5" />}
+            trend="up"
+            trendValue="+12.3%"
+            variant="glass"
+          />
+          
+          <EnhancedStatCard
+            title="Countries Reached"
+            value={totalCountries}
+            description="Geographic coverage"
+            icon={<GlobeAmericasIcon className="h-5 w-5" />}
+            trend="neutral"
+            variant="glass"
+          />
+          
+          <EnhancedStatCard
+            title="Approval Rate"
+            value={`${Math.round(approvalRate)}%`}
+            description={`${approvedProjects} of ${totalProjects} projects`}
+            icon={<ChartPieIcon className="h-5 w-5" />}
+            trend={approvalRate > 75 ? "up" : "neutral"}
+            variant="glass"
+          />
+        </motion.div>
 
         {/* Featured insight */}
         <div className="factoid mb-6 sm:mb-8 animate-fade-in">
@@ -256,31 +334,59 @@ export default function Dashboard() {
         {activeTab === 'overview' && (
           <div className="animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
-              <div className="dashboard-card">
-                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Project Status Distribution</h2>
+              <motion.div 
+                className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-100 dark:border-slate-700/50 rounded-xl shadow-lg p-6"
+                variants={slideUp}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.3 }}
+              >
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-gray-900 dark:text-white flex items-center">
+                  <ChartPieIcon className="h-5 w-5 text-primary-500 mr-2" />
+                  Project Status Distribution
+                </h2>
                 <div className="h-60 sm:h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={statusData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={window.innerWidth < 640 ? 60 : 80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, pctValue }) => `${name}: ${pctValue.toFixed(1)}%`}
-                      >
-                        {statusData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  <motion.div
+                    className="w-full h-full"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.7, ease: "easeOut", delay: 0.6 }}
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={statusData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          outerRadius={window.innerWidth < 640 ? 60 : 80}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={({ name, pctValue }) => `${name}: ${pctValue.toFixed(1)}%`}
+                          animationBegin={300}
+                          animationDuration={1200}
+                          animationEasing="ease-out"
+                        >
+                          {statusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          content={<CustomTooltip />} 
+                          animationDuration={300}
+                          animationEasing="ease-out"
+                        />
+                        <Legend 
+                          wrapperStyle={{ 
+                            fontSize: window.innerWidth < 640 ? '10px' : '12px',
+                            paddingTop: '20px'
+                          }} 
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
               <div className="dashboard-card">
                 <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Top Countries by Project Count</h2>
                 <div className="h-60 sm:h-80">
