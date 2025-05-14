@@ -119,13 +119,13 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 pb-12">
       {/* Header */}
       <div className="bg-white shadow-sm">
-        <div className="container mx-auto py-6 px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+        <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-0">
               <span className="text-blue-600">UN-Habitat</span> Dashboard
             </h1>
             <Link href="/">
-              <button className="btn btn-secondary flex items-center">
+              <button className="btn btn-secondary flex items-center w-full sm:w-auto justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -136,9 +136,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Key metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fade-in">
           <div className="dashboard-card">
             <p className="dashboard-label">Total Projects</p>
             <p className="dashboard-stat text-blue-600">{totalProjects}</p>
@@ -175,14 +175,14 @@ export default function Dashboard() {
         </div>
 
         {/* Featured insight */}
-        <div className="factoid mb-8 animate-fade-in">
+        <div className="factoid mb-6 sm:mb-8 animate-fade-in">
           <div className="flex items-start">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500 mr-2 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500 mr-2 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
               <h3 className="text-lg font-semibold text-blue-800">Key Insight</h3>
-              <p className="text-blue-700">
+              <p className="text-blue-700 text-sm sm:text-base">
                 {countryData[0]?.name} leads with {countryData[0]?.projects} projects and a total budget of {formatCurrency(countryData[0]?.value)}, 
                 representing {(countryData[0]?.projects / totalProjects * 100).toFixed(1)}% of all UN-Habitat initiatives.
               </p>
@@ -191,11 +191,11 @@ export default function Dashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200 mb-8">
-          <nav className="-mb-px flex space-x-8">
+        <div className="border-b border-gray-200 mb-6 sm:mb-8 overflow-x-auto">
+          <nav className="-mb-px flex space-x-4 sm:space-x-8 whitespace-nowrap py-1">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm ${
                 activeTab === 'overview'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -205,7 +205,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab('countries')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm ${
                 activeTab === 'countries'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -215,7 +215,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab('orgUnits')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm ${
                 activeTab === 'orgUnits'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -225,7 +225,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab('themes')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm ${
                 activeTab === 'themes'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -239,10 +239,10 @@ export default function Dashboard() {
         {/* Status Overview */}
         {activeTab === 'overview' && (
           <div className="animate-fade-in">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
               <div className="dashboard-card">
-                <h2 className="text-xl font-semibold mb-4">Project Status Distribution</h2>
-                <div className="h-80">
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Project Status Distribution</h2>
+                <div className="h-60 sm:h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -250,7 +250,7 @@ export default function Dashboard() {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={80}
+                        outerRadius={window.innerWidth < 640 ? 60 : 80}
                         fill="#8884d8"
                         dataKey="value"
                         label={({ name, pctValue }) => `${name}: ${pctValue.toFixed(1)}%`}
@@ -260,38 +260,38 @@ export default function Dashboard() {
                         ))}
                       </Pie>
                       <Tooltip content={<CustomTooltip />} />
-                      <Legend />
+                      <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
               </div>
               <div className="dashboard-card">
-                <h2 className="text-xl font-semibold mb-4">Top Countries by Project Count</h2>
-                <div className="h-80">
+                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Top Countries by Project Count</h2>
+                <div className="h-60 sm:h-80">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={countryData.slice(0, 5)}>
+                    <BarChart data={countryData.slice(0, window.innerWidth < 640 ? 3 : 5)}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
+                      <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                      <YAxis tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
                       <Tooltip content={<CustomTooltip />} />
-                      <Legend />
+                      <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
                       <Bar dataKey="projects" fill="#8884d8" name="Projects" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
             </div>
-            <div className="dashboard-card mb-8">
-              <h2 className="text-xl font-semibold mb-4">Top Themes by Budget Allocation</h2>
-              <div className="h-80">
+            <div className="dashboard-card mb-6 sm:mb-8">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Top Themes by Budget Allocation</h2>
+              <div className="h-60 sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={themeData.slice(0, 5)}>
+                  <BarChart data={themeData.slice(0, window.innerWidth < 640 ? 3 : 5)}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                    <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
                     <Bar yAxisId="left" dataKey="projects" fill="#8884d8" name="Projects" />
                     <Bar yAxisId="right" dataKey="value" fill="#82ca9d" name="Budget Value" />
                   </BarChart>
@@ -304,17 +304,17 @@ export default function Dashboard() {
         {/* Countries Tab */}
         {activeTab === 'countries' && (
           <div className="animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Projects by Country (Top 10)</h2>
-            <div className="dashboard-card mb-8">
-              <div className="h-96">
+            <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Projects by Country (Top {window.innerWidth < 640 ? 5 : 10})</h2>
+            <div className="dashboard-card mb-6 sm:mb-8">
+              <div className="h-64 sm:h-96">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={countryData}>
+                  <BarChart data={countryData.slice(0, window.innerWidth < 640 ? 5 : 10)}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                    <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
                     <Bar yAxisId="left" dataKey="projects" fill="#8884d8" name="Project Count" />
                     <Bar yAxisId="right" dataKey="value" fill="#82ca9d" name="Budget Value" />
                   </BarChart>
@@ -327,17 +327,17 @@ export default function Dashboard() {
         {/* Org Units Tab */}
         {activeTab === 'orgUnits' && (
           <div className="animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Projects by Lead Organization Unit (Top 10)</h2>
-            <div className="dashboard-card mb-8">
-              <div className="h-96">
+            <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Projects by Lead Organization Unit (Top {window.innerWidth < 640 ? 5 : 10})</h2>
+            <div className="dashboard-card mb-6 sm:mb-8">
+              <div className="h-64 sm:h-96">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={orgUnitData}>
+                  <BarChart data={orgUnitData.slice(0, window.innerWidth < 640 ? 5 : 10)}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                    <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
                     <Bar yAxisId="left" dataKey="projects" fill="#8884d8" name="Project Count" />
                     <Bar yAxisId="right" dataKey="value" fill="#82ca9d" name="Budget Value" />
                   </BarChart>
@@ -350,17 +350,17 @@ export default function Dashboard() {
         {/* Themes Tab */}
         {activeTab === 'themes' && (
           <div className="animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Projects by Theme (Top 10)</h2>
-            <div className="dashboard-card mb-8">
-              <div className="h-96">
+            <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Projects by Theme (Top {window.innerWidth < 640 ? 5 : 10})</h2>
+            <div className="dashboard-card mb-6 sm:mb-8">
+              <div className="h-64 sm:h-96">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={themeData}>
+                  <BarChart data={themeData.slice(0, window.innerWidth < 640 ? 5 : 10)}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                    <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{ fontSize: window.innerWidth < 640 ? 10 : 12 }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: window.innerWidth < 640 ? '10px' : '12px' }} />
                     <Bar yAxisId="left" dataKey="projects" fill="#8884d8" name="Project Count" />
                     <Bar yAxisId="right" dataKey="value" fill="#82ca9d" name="Budget Value" />
                   </BarChart>

@@ -155,20 +155,20 @@ export default function Home() {
 
   // Project List component
   const ProjectList = () => (
-    <div className="container mx-auto p-6 animate-fade-in">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+    <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 animate-fade-in">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
           <span className="text-blue-600">UN-Habitat</span> Projects
         </h1>
-        <div className="flex space-x-2">
-          <button onClick={() => setView('add')} className="btn btn-primary flex items-center">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <button onClick={() => setView('add')} className="btn btn-primary flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             Add Project
           </button>
-          <Link href="/dashboard">
-            <button className="btn btn-success flex items-center">
+          <Link href="/dashboard" className="w-full sm:w-auto">
+            <button className="btn btn-success flex items-center justify-center w-full">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
@@ -178,7 +178,7 @@ export default function Home() {
         </div>
       </div>
       
-      <div className="card mb-8">
+      <div className="card mb-6 md:mb-8">
         <h2 className="text-xl font-semibold mb-4">Search & Filter</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -228,17 +228,17 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <div className="text-sm text-gray-600">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-0">
+        <div className="text-sm text-gray-600 order-2 sm:order-1">
           Showing {filteredProjects.length > 0 ? indexOfFirstProject + 1 : 0} to {Math.min(indexOfLastProject, filteredProjects.length)} of {filteredProjects.length} projects
         </div>
-        <div className="flex items-center">
-          <label className="mr-2 text-sm">Rows per page:</label>
+        <div className="flex items-center self-end sm:self-auto order-1 sm:order-2">
+          <label className="mr-2 text-sm whitespace-nowrap">Rows per page:</label>
           <select 
             value={rowsPerPage} 
             onChange={(e) => {
               setRowsPerPage(Number(e.target.value));
-              setCurrentPage(1); // Reset to first page when changing rows per page
+              setCurrentPage(1);
             }} 
             className="form-control w-auto"
           >
@@ -260,78 +260,87 @@ export default function Home() {
           <p className="text-gray-500">Try adjusting your search or filter criteria</p>
         </div>
       ) : (
-        <div className="table-container mb-4">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Status</th>
-                <th>PAG Value</th>
-                <th>Country(ies)</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentProjects.map(project => (
-                <tr key={project.ProjectID}>
-                  <td className="font-medium">{project.ProjectID}</td>
-                  <td>{project.ProjectTitle}</td>
-                  <td>
-                    <span className={`badge ${project.ApprovalStatus === 'Approved' ? 'badge-approved' : 'badge-pending'}`}>
-                      {project.ApprovalStatus}
-                    </span>
-                  </td>
-                  <td>{formatCurrency(project.PAGValue)}</td>
-                  <td>
-                    <div className="flex flex-wrap gap-1">
-                      {project.countries?.map(country => (
-                        <span key={country} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                          {country}
+        <div className="overflow-x-auto -mx-4 sm:mx-0 mb-4">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden shadow-md rounded-lg">
+              <table className="min-w-full">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th className="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                    <th className="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="hidden md:table-cell px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">PAG Value</th>
+                    <th className="hidden sm:table-cell px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Country(ies)</th>
+                    <th className="px-4 py-3 text-right text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {currentProjects.map(project => (
+                    <tr key={project.ProjectID} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{project.ProjectID}</td>
+                      <td className="px-4 py-3 text-xs sm:text-sm text-gray-700 max-w-[200px] sm:max-w-xs truncate">{project.ProjectTitle}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-xs sm:text-sm">
+                        <span className={`badge ${project.ApprovalStatus === 'Approved' ? 'badge-approved' : 'badge-pending'}`}>
+                          {project.ApprovalStatus}
                         </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex space-x-2">
-                      <button 
-                        onClick={() => { setSelectedProject(project); setView('view'); }} 
-                        className="p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors"
-                        title="View details"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      </button>
-                      <button 
-                        onClick={() => { setSelectedProject(project); setView('edit'); }} 
-                        className="p-1.5 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 transition-colors"
-                        title="Edit project"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                      <button 
-                        onClick={() => { setProjectToDelete(project.ProjectID); setIsConfirmDialogOpen(true); }} 
-                        className="p-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
-                        title="Delete project"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      </td>
+                      <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-700">{formatCurrency(project.PAGValue)}</td>
+                      <td className="hidden sm:table-cell px-4 py-3 text-xs sm:text-sm text-gray-700">
+                        <div className="flex flex-wrap gap-1">
+                          {project.countries?.slice(0, 2).map(country => (
+                            <span key={country} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                              {country}
+                            </span>
+                          ))}
+                          {project.countries?.length > 2 && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                              +{project.countries.length - 2} more
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-xs sm:text-sm text-right">
+                        <div className="flex space-x-1 sm:space-x-2 justify-end">
+                          <button 
+                            onClick={() => { setSelectedProject(project); setView('view'); }} 
+                            className="p-1 sm:p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors"
+                            title="View details"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                          </button>
+                          <button 
+                            onClick={() => { setSelectedProject(project); setView('edit'); }} 
+                            className="p-1 sm:p-1.5 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 transition-colors"
+                            title="Edit project"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </button>
+                          <button 
+                            onClick={() => { setProjectToDelete(project.ProjectID); setIsConfirmDialogOpen(true); }} 
+                            className="p-1 sm:p-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
+                            title="Delete project"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
 
-      <div className="pagination">
+      <div className="pagination mt-6">
         <div className="pagination-info">
           Page {currentPage} of {totalPages}
         </div>
@@ -344,14 +353,14 @@ export default function Home() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Previous
+            <span className="hidden sm:inline">Previous</span>
           </button>
           <button 
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
             className="pagination-btn flex items-center" 
             disabled={currentPage === totalPages}
           >
-            Next
+            <span className="hidden sm:inline">Next</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -449,7 +458,7 @@ export default function Home() {
     };
 
     return (
-      <div className="container mx-auto p-6 animate-fade-in">
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 animate-fade-in">
         <div className="mb-6 flex items-center">
           <button 
             onClick={() => setView('list')} 
@@ -458,9 +467,9 @@ export default function Home() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to List
+            <span className="hidden sm:inline">Back to List</span>
           </button>
-          <h1 className="text-3xl font-bold text-gray-800">{mode === 'add' ? 'Add New Project' : 'Edit Project'}</h1>
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-800">{mode === 'add' ? 'Add New Project' : 'Edit Project'}</h1>
         </div>
         
         {errors.submit && (
@@ -479,7 +488,7 @@ export default function Home() {
         )}
         
         <form onSubmit={handleSubmit} className="card">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <h2 className="text-xl font-semibold mb-4">Project Details</h2>
               
@@ -691,10 +700,10 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="mt-8 flex space-x-4">
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:space-x-4">
             <button 
               type="submit" 
-              className="btn btn-primary flex items-center" 
+              className="btn btn-primary flex items-center justify-center w-full sm:w-auto" 
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -717,7 +726,7 @@ export default function Home() {
             <button 
               type="button" 
               onClick={() => setView('list')} 
-              className="btn btn-secondary flex items-center"
+              className="btn btn-secondary flex items-center justify-center w-full sm:w-auto"
               disabled={isSubmitting}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -733,7 +742,7 @@ export default function Home() {
 
   // Project View component
   const ProjectView = () => (
-    <div className="container mx-auto p-6 animate-fade-in">
+    <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 animate-fade-in">
       <div className="mb-6 flex items-center">
         <button 
           onClick={() => setView('list')} 
@@ -742,21 +751,21 @@ export default function Home() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to List
+          <span className="hidden sm:inline">Back to List</span>
         </button>
-        <h1 className="text-3xl font-bold text-gray-800">Project Details</h1>
+        <h1 className="text-xl sm:text-3xl font-bold text-gray-800">Project Details</h1>
       </div>
       
       {selectedProject && (
         <div className="card">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="lg:col-span-2">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-blue-600 mb-1">{selectedProject.ProjectTitle}</h2>
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="mr-2">ID: {selectedProject.ProjectID}</span>
-                  <span className="mx-2">•</span>
-                  <span className="ml-2">PAAS Code: {selectedProject.PAASCode}</span>
+                <h2 className="text-xl sm:text-2xl font-bold text-blue-600 mb-1">{selectedProject.ProjectTitle}</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500">
+                  <span className="mr-0 sm:mr-2">ID: {selectedProject.ProjectID}</span>
+                  <span className="hidden sm:inline mx-2">•</span>
+                  <span className="ml-0 sm:ml-2">PAAS Code: {selectedProject.PAASCode}</span>
                 </div>
               </div>
 
@@ -815,7 +824,7 @@ export default function Home() {
               </div>
             </div>
             
-            <div>
+            <div className="space-y-6">
               <div className="bg-gray-50 p-5 rounded-lg mb-6">
                 <h3 className="text-lg font-semibold mb-4">Countries</h3>
                 {selectedProject.countries?.length ? (
@@ -863,10 +872,10 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="mt-8 flex space-x-4">
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:space-x-4">
             <button 
               onClick={() => { setView('edit'); }} 
-              className="btn btn-primary flex items-center"
+              className="btn btn-primary flex items-center justify-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -875,7 +884,7 @@ export default function Home() {
             </button>
             <button 
               onClick={() => { setProjectToDelete(selectedProject.ProjectID); setIsConfirmDialogOpen(true); }} 
-              className="btn btn-danger flex items-center"
+              className="btn btn-danger flex items-center justify-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
