@@ -1,23 +1,49 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, Poppins } from 'next/font/google';
+import ThemeProvider from '../components/layout/ThemeProvider';
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
+import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
+// Load fonts
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const poppins = Poppins({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
 
 export const metadata = {
   title: 'UN-Habitat Project Management',
-  description: 'Dashboard for UN-Habitat Project Management System',
-}
+  description: 'UN-Habitat project management and data visualization platform',
+};
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light dark" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={inter.className}>
-        {children}
+      <body className="flex flex-col min-h-screen">
+        <ThemeProvider>
+          {({ isDarkMode, toggleDarkMode }) => (
+            <>
+              <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+              <main className="flex-grow pt-16">
+                {children}
+              </main>
+              <Footer />
+            </>
+          )}
+        </ThemeProvider>
       </body>
     </html>
-  )
+  );
 } 

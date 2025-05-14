@@ -14,7 +14,9 @@
     "db-setup": "node setup-db-cli.js"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "dotenv": "^16.5.0",
+    "framer-motion": "^12.11.3",
     "mysql2": "^3.14.1",
     "next": "15.3.2",
     "react": "^19.0.0",
@@ -24,7 +26,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.6",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
