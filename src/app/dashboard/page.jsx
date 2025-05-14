@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import 'tailwindcss/tailwind.css';
+// Tailwind is already imported in globals.css
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);

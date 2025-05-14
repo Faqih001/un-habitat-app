@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-import 'tailwindcss/tailwind.css';
+// Tailwind is already imported in globals.css
 
 // Helper function to parse dates
 const parseDate = (date) => {
