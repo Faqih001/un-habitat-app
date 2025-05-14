@@ -6,18 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup-excel": "node setup-excel-file.js",
+    "setup-db": "node setup-database.js",
+    "import-excel": "node import-excel-to-mysql.js",
+    "setup-all": "node setup-and-import.js",
+    "db-setup": "node setup-db-cli.js"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
+    "mysql2": "^3.14.1",
+    "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.2"
+    "recharts": "^2.15.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4"
   }
 }
