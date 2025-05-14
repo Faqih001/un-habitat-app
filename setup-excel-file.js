@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the Excel file specified by the user
-const sourceExcelPath = '/home/amirul/Desktop/Interviews/UN-Habitat PLGS Information Technology Test/un_habitat_app/un-habitat-app/public/Application Development - Exam Data.xlsx';
+const sourceExcelPath = '/home/amirul/Desktop/Interviews/UN-Habitat PLGS Information Technology Test/un-habitat-app/public/Application Development - Exam Data.xlsx';
 
 // Destination paths
 const projectRoot = __dirname;
