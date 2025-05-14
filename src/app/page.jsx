@@ -2,9 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
+import { 
+  ArrowTopRightOnSquareIcon, 
+  ChartBarIcon, 
+  PlusIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
+import ProjectCard from '@/components/project/ProjectCard';
+import { fadeIn, slideUp, staggerContainer, staggerItem } from '@/lib/framer-motion';
 import './custom.css';
 
 // Helper function to parse dates
