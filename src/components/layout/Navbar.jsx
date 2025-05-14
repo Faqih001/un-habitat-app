@@ -3,15 +3,24 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Bars3Icon, XMarkIcon, MoonIcon, SunIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Bars3Icon, 
+  XMarkIcon, 
+  MoonIcon, 
+  SunIcon, 
+  MagnifyingGlassIcon,
+  SwatchIcon,
+  ChevronDownIcon
+} from '@heroicons/react/24/outline';
 import { useTheme } from './ThemeProvider';
 
 const Navbar = () => {
-  const { isDarkMode, toggleDarkMode } = useTheme();
+  const { isDarkMode, toggleDarkMode, colorAccent, changeColorAccent } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isColorMenuOpen, setIsColorMenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Monitor scroll position
@@ -26,7 +35,20 @@ const Navbar = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     setIsOpen(false);
+    setIsColorMenuOpen(false);
   }, [pathname]);
+
+  // Close color menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isColorMenuOpen && !e.target.closest('.color-menu-container')) {
+        setIsColorMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isColorMenuOpen]);
 
   const handleSearch = (e) => {
     e.preventDefault();
