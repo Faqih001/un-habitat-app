@@ -1,10 +1,14 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Bars3Icon, XMarkIcon, MoonIcon, SunIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useTheme } from './ThemeProvider';
 
-const Navbar = ({ toggleDarkMode, isDarkMode }) => {
+const Navbar = () => {
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

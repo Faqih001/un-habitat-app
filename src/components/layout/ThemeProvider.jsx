@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useEffect, useState } from 'react';
 
 // Create a context for theme state
@@ -55,12 +57,7 @@ const ThemeProvider = ({ children }) => {
     });
   };
   
-  // Check if children is a function and pass theme values
-  if (typeof children === 'function') {
-    return children({ isDarkMode, toggleDarkMode });
-  }
-  
-  // Provide theme context to children if not using function pattern
+  // Provide theme context to children
   return (
     <ThemeContext.Provider
       value={{

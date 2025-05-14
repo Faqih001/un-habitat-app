@@ -254,7 +254,11 @@ a {
   }
   
   .text-balance {
-    text-wrap: balance;
+    max-width: 60ch;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
   }
 }
 

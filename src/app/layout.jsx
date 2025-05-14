@@ -33,15 +33,11 @@ export default function RootLayout({ children }) {
       </head>
       <body className="flex flex-col min-h-screen">
         <ThemeProvider>
-          {({ isDarkMode, toggleDarkMode }) => (
-            <>
-              <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-              <main className="flex-grow pt-16">
-                {children}
-              </main>
-              <Footer />
-            </>
-          )}
+          <Navbar />
+          <main className="flex-grow pt-16">
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
