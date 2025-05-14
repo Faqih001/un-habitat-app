@@ -3,6 +3,18 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ChevronLeftIcon, 
+  ChevronRightIcon, 
+  ChevronDoubleLeftIcon, 
+  ChevronDoubleRightIcon,
+  TableCellsIcon,
+  Squares2X2Icon,
+  MagnifyingGlassIcon
+} from '@heroicons/react/24/outline';
+import { staggerContainer, staggerItem } from '@/lib/framer-motion';
+import ProjectCard from './project/ProjectCard';
 
 export default function ProjectList() {
   const router = useRouter();
@@ -14,6 +26,7 @@ export default function ProjectList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState('ProjectID');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [viewMode, setViewMode] = useState('table'); // table or grid
   const projectsPerPage = 10;
 
   useEffect(() => {

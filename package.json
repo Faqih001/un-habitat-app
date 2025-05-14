@@ -17,6 +17,7 @@
     "@heroicons/react": "^2.2.0",
     "dotenv": "^16.5.0",
     "framer-motion": "^12.11.3",
+    "html2canvas": "^1.4.1",
     "mysql2": "^3.14.1",
     "next": "^14.0.4",
     "react": "^18.2.0",

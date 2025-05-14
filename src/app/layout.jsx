@@ -1,4 +1,4 @@
-import { Inter, Poppins } from 'next/font/google';
+import { Inter, Poppins, Roboto_Mono } from 'next/font/google';
 import ThemeProvider from '../components/layout/ThemeProvider';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -12,10 +12,17 @@ const inter = Inter({
 });
 
 const poppins = Poppins({
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-poppins',
+});
+
+const robotoMono = Roboto_Mono({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto-mono',
 });
 
 export const metadata = {
