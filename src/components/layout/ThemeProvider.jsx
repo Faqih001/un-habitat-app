@@ -108,5 +108,6 @@ const ThemeProvider = ({ children }) => {
       </div>
     </ThemeContext.Provider>
   );
+}
 
 export default ThemeProvider; 
