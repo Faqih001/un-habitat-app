@@ -1,8 +1,18 @@
 "use client";
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowTopRightOnSquareIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { glassCardHover } from '@/lib/framer-motion';
+import { 
+  ArrowTopRightOnSquareIcon, 
+  PencilSquareIcon, 
+  TrashIcon,
+  CalendarIcon, 
+  MapPinIcon,
+  CurrencyDollarIcon,
+  ChevronRightIcon,
+  BuildingOfficeIcon
+} from '@heroicons/react/24/outline';
+import { staggerItem, glassCardHover } from '@/lib/framer-motion';
 
 /**
  * ProjectCard component for displaying project information in a card format
@@ -15,6 +25,8 @@ import { glassCardHover } from '@/lib/framer-motion';
  * @param {Function} props.onView - View handler function
  */
 const ProjectCard = ({ project, onView, onEdit, onDelete }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
   const {
     ProjectID,
     ProjectTitle,
@@ -23,7 +35,8 @@ const ProjectCard = ({ project, onView, onEdit, onDelete }) => {
     EndDate,
     PAGValue,
     LeadOrgUnit,
-    countries = []
+    countries = [],
+    themes = []
   } = project;
 
   // Format budget to readable format
@@ -35,6 +48,13 @@ const ProjectCard = ({ project, onView, onEdit, onDelete }) => {
       maximumFractionDigits: 1
     }).format(value || 0);
   };
+
+  // Format date to readable format
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  };
   
   // Determine status color
   const statusColors = {
@@ -45,6 +65,38 @@ const ProjectCard = ({ project, onView, onEdit, onDelete }) => {
   };
   
   const statusColor = statusColors[ApprovalStatus] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+  
+  // Enhanced card animations
+  const cardVariants = {
+    ...glassCardHover,
+    rest: { 
+      y: 0, 
+      opacity: 1, 
+      transition: { duration: 0.3, ease: "easeOut" } 
+    },
+    hover: { 
+      y: -8, 
+      boxShadow: "0 15px 30px rgba(0,0,0,0.1)",
+      transition: { duration: 0.3, ease: "easeInOut" } 
+    }
+  };
+  
+  // Content animation for staggered reveal
+  const contentVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
 
   return (
     <motion.div
@@ -52,51 +104,119 @@ const ProjectCard = ({ project, onView, onEdit, onDelete }) => {
       initial="rest"
       whileHover="hover"
       animate="rest"
-      variants={glassCardHover}
+      variants={cardVariants}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="h-full rounded-xl overflow-hidden bg-white dark:bg-slate-800/90 backdrop-blur-sm border border-gray-100 dark:border-slate-700/50 shadow-lg">
+      <div className="h-full rounded-xl overflow-hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-gray-100 dark:border-slate-700/50 shadow-md transition-all duration-300 group-hover:shadow-xl">
         <div className="p-5 flex flex-col h-full">
-          {/* Header */}
-          <div className="flex justify-between items-start mb-3">
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusColor}`}>
+          {/* Header with animated reveal */}
+          <motion.div 
+            className="flex justify-between items-start mb-3"
+            variants={contentVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.span 
+              className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusColor}`}
+              variants={itemVariants}
+            >
               {ApprovalStatus}
-            </span>
-            <span className="text-sm text-gray-500 font-mono">{ProjectID}</span>
-          </div>
+            </motion.span>
+            <motion.span 
+              className="text-sm text-gray-500 font-mono"
+              variants={itemVariants}
+            >
+              {ProjectID}
+            </motion.span>
+          </motion.div>
           
-          {/* Title */}
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+          {/* Title with animation */}
+          <motion.h3 
+            className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2"
+            variants={staggerItem}
+          >
             {ProjectTitle}
-          </h3>
+          </motion.h3>
           
-          {/* Details */}
-          <div className="space-y-2 mb-3 flex-grow">
+          {/* Details with icons */}
+          <motion.div 
+            className="space-y-3 mb-4 flex-grow"
+            variants={contentVariants}
+            initial="hidden"
+            animate="visible"
+          >
             {LeadOrgUnit && (
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <span className="font-medium">Lead: </span>{LeadOrgUnit}
-              </p>
+              <motion.div 
+                className="flex items-center text-sm"
+                variants={itemVariants}
+              >
+                <BuildingOfficeIcon className="h-4 w-4 text-primary-500 mr-2 flex-shrink-0" />
+                <span className="text-gray-600 dark:text-gray-300 truncate">
+                  {LeadOrgUnit}
+                </span>
+              </motion.div>
             )}
             
             {countries.length > 0 && (
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <span className="font-medium">Countries: </span>
-                <span className="line-clamp-1">{countries.slice(0, 3).join(', ')}{countries.length > 3 ? ` +${countries.length - 3} more` : ''}</span>
-              </p>
+              <motion.div 
+                className="flex items-center text-sm"
+                variants={itemVariants}
+              >
+                <MapPinIcon className="h-4 w-4 text-primary-500 mr-2 flex-shrink-0" />
+                <span className="text-gray-600 dark:text-gray-300 truncate">
+                  {countries.slice(0, 2).join(', ')}
+                  {countries.length > 2 && ` +${countries.length - 2}`}
+                </span>
+              </motion.div>
             )}
             
             {StartDate && EndDate && (
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <span className="font-medium">Duration: </span>
-                {new Date(StartDate).toLocaleDateString()} - {new Date(EndDate).toLocaleDateString()}
-              </p>
+              <motion.div 
+                className="flex items-center text-sm"
+                variants={itemVariants}
+              >
+                <CalendarIcon className="h-4 w-4 text-primary-500 mr-2 flex-shrink-0" />
+                <span className="text-gray-600 dark:text-gray-300">
+                  {formatDate(StartDate)} - {formatDate(EndDate)}
+                </span>
+              </motion.div>
             )}
             
             {PAGValue && (
-              <p className="text-lg font-bold mt-2 text-primary-600 dark:text-primary-400">
-                {formatBudget(PAGValue)}
-              </p>
+              <motion.div 
+                className="flex items-center"
+                variants={itemVariants}
+              >
+                <CurrencyDollarIcon className="h-4 w-4 text-primary-500 mr-2 flex-shrink-0" />
+                <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                  {formatBudget(PAGValue)}
+                </span>
+              </motion.div>
             )}
-          </div>
+            
+            {/* Themes as tags */}
+            {themes.length > 0 && (
+              <motion.div 
+                className="flex flex-wrap gap-1.5 mt-3"
+                variants={itemVariants}
+              >
+                {themes.slice(0, 2).map(theme => (
+                  <span 
+                    key={theme} 
+                    className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400"
+                  >
+                    {theme}
+                  </span>
+                ))}
+                {themes.length > 2 && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                    +{themes.length - 2}
+                  </span>
+                )}
+              </motion.div>
+            )}
+          </motion.div>
           
           {/* Actions */}
           <div className="flex justify-between pt-3 border-t border-gray-100 dark:border-slate-700/50">

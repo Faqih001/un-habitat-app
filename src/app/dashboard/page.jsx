@@ -2,7 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { motion } from 'framer-motion';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+  ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area,
+  LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+} from 'recharts';
+import { 
+  ChartBarIcon, 
+  HomeIcon, 
+  ChartPieIcon,
+  GlobeAmericasIcon,
+  CurrencyDollarIcon,
+  UsersIcon,
+  DocumentTextIcon
+} from '@heroicons/react/24/outline';
+import EnhancedStatCard from '@/components/ui/EnhancedStatCard';
+import { fadeIn, slideUp, staggerContainer, staggerItem, pageTransition, childrenReveal } from '@/lib/framer-motion';
 
 // Format currency values
 const formatCurrency = (value) => {

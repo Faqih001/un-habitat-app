@@ -53,6 +53,25 @@ export const slideUp = {
   }
 };
 
+// Slide down animation
+export const slideDown = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      type: 'spring', 
+      damping: 25, 
+      stiffness: 300 
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20,
+    transition: { duration: 0.2 }
+  }
+};
+
 // Slide up with delay (for staggered animations)
 export const slideUpWithDelay = (delay = 0.1) => ({
   hidden: { opacity: 0, y: 20 },
@@ -130,17 +149,31 @@ export const scaleUp = {
   }
 };
 
-// Staggered animation for lists (children stagger in)
-export const staggerContainer = (staggerChildren = 0.05, delayChildren = 0) => ({
+// Staggered container for list items
+export const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      delayChildren,
-      staggerChildren
+      staggerChildren: 0.05,
+      delayChildren: 0.1
     }
   }
-});
+};
+
+// Stagger item - for use with staggerContainer
+export const staggerItem = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      damping: 15,
+      stiffness: 200
+    }
+  }
+};
 
 // Chart animations
 export const chartAnimation = {
@@ -168,6 +201,13 @@ export const barChartAnimation = {
   }
 };
 
+// Scale animation for buttons and interactive elements
+export const scaleOnHover = {
+  rest: { scale: 1 },
+  hover: { scale: 1.05 },
+  tap: { scale: 0.98 }
+};
+
 // Animation hooks
 export const useAnimationHooks = {
   // Hover animation for cards
@@ -188,12 +228,93 @@ export const useAnimationHooks = {
   }
 };
 
+// Glass card hover effect for modern UI
+export const glassCardHover = {
+  rest: { 
+    y: 0, 
+    opacity: 1,
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)"
+  },
+  hover: { 
+    y: -5, 
+    opacity: 1,
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)"
+  }
+};
+
+// Pulse animation for notifications or highlighting elements
+export const pulse = {
+  rest: { scale: 1 },
+  pulse: {
+    scale: [1, 1.05, 1],
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      repeatType: "mirror"
+    }
+  }
+};
+
+// Rotate animation
+export const rotate = {
+  rest: { rotate: 0 },
+  spin: {
+    rotate: 360,
+    transition: {
+      duration: 1,
+      repeat: Infinity,
+      ease: "linear"
+    }
+  }
+};
+
+// Bounce animation for playful UI elements
+export const bounce = {
+  rest: { y: 0 },
+  bounce: {
+    y: [0, -10, 0],
+    transition: {
+      duration: 0.5,
+      repeat: Infinity,
+      repeatType: "mirror",
+      repeatDelay: 0.25
+    }
+  }
+};
+
 // Page transition animations
 export const pageTransition = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: { duration: 0.3 }
+  initial: { opacity: 0, y: 20 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.1, 0.25, 1.0], // cubic-bezier
+      when: "beforeChildren",
+      staggerChildren: 0.1
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    transition: {
+      duration: 0.3
+    }
+  }
+};
+
+// Child element reveal for page transitions
+export const childrenReveal = {
+  initial: { opacity: 0, y: 20 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  }
 };
 
 // Utility function to create staggered animations for array items
@@ -211,37 +332,6 @@ export const createStaggeredAnimations = (items, animationPreset, staggerDelay =
       }
     }
   }));
-};
-
-// Glass card effect with hover animation
-export const glassCardHover = {
-  rest: { 
-    scale: 1, 
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
-  },
-  hover: { 
-    scale: 1.02, 
-    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-    transition: { 
-      type: "spring", 
-      stiffness: 300, 
-      damping: 15 
-    }
-  }
-};
-
-// Advanced button hover animation
-export const advancedButtonHover = {
-  rest: { scale: 1 },
-  hover: { 
-    scale: 1.05,
-    transition: { 
-      type: "spring", 
-      stiffness: 400, 
-      damping: 10 
-    }
-  },
-  tap: { scale: 0.95 }
 };
 
 // Modal animation variants
@@ -290,4 +380,4 @@ export const skeletonAnimation = {
       ease: "linear"
     }
   }
-}; 
+};
