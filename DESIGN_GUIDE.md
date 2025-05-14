@@ -116,4 +116,4 @@ The redesign is implemented using:
 
 ---
 
-This design guide serves as documentation for the design decisions made during the UN-Habitat app redesign and as a reference for maintaining design consistency in future development. 
+This design guide serves as documentation for the design decisions made during the UN-Habitat app redesign and as a reference for maintaining design consistency in future development.
