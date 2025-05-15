@@ -89,14 +89,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-6">
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
         {isEditMode ? 'Edit Project' : 'Create New Project'}
       </h2>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               control={form.control}
               name="ProjectTitle"

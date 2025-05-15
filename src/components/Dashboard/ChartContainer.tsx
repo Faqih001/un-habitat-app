@@ -74,29 +74,29 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ projects }) => {
     .slice(0, 8);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8">
       <Card className="col-span-1">
-        <CardHeader className="pb-2">
-          <CardTitle>Projects by Country (Top 10)</CardTitle>
+        <CardHeader className="pb-1 sm:pb-2">
+          <CardTitle className="text-base sm:text-lg">Projects by Country (Top 10)</CardTitle>
         </CardHeader>
-        <CardContent className="h-[550px]">
+        <CardContent className="h-[350px] sm:h-[450px] md:h-[550px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={countryChartData}
-              margin={{ top: 30, right: 30, left: 20, bottom: 70 }}
+              margin={{ top: 20, right: 10, left: 0, bottom: 60 }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
               <XAxis 
                 dataKey="name" 
                 angle={-45} 
                 textAnchor="end" 
-                height={100}
-                tick={{ fontSize: 12 }}
+                height={80}
+                tick={{ fontSize: 10 }}
                 interval={0}
               />
-              <YAxis />
+              <YAxis tick={{ fontSize: 10 }} />
               <Tooltip formatter={(value) => [`${value} Projects`, 'Count']} />
-              <Legend wrapperStyle={{ paddingTop: 10 }} />
+              <Legend wrapperStyle={{ paddingTop: 5, fontSize: 12 }} />
               <Bar dataKey="count" name="Projects" fill="#1A97D7" />
             </BarChart>
           </ResponsiveContainer>
@@ -104,19 +104,22 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ projects }) => {
       </Card>
 
       <Card className="col-span-1">
-        <CardHeader className="pb-2">
-          <CardTitle>Projects by Theme</CardTitle>
+        <CardHeader className="pb-1 sm:pb-2">
+          <CardTitle className="text-base sm:text-lg">Projects by Theme</CardTitle>
         </CardHeader>
-        <CardContent className="h-[550px] flex flex-col items-center">
-          <div className="w-full max-w-md mx-auto h-[300px]">
+        <CardContent className="h-[350px] sm:h-[450px] md:h-[550px] flex flex-col items-center">
+          <div className="w-full max-w-md mx-auto h-[200px] sm:h-[250px] md:h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={themeChartData}
                   cx="50%"
                   cy="50%"
-                  labelLine={true}
+                  labelLine={false}
                   label={({ name, percent }) => {
+                    // Only show labels on larger screens
+                    if (window.innerWidth < 640) return null;
+                    
                     // Show first few words with full percentage
                     const words = name.split(' ');
                     let displayName = words.length > 1 
@@ -130,8 +133,8 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ projects }) => {
                       
                     return `${displayName}: ${(percent * 100).toFixed(0)}%`;
                   }}
-                  outerRadius={100}
-                  innerRadius={40}
+                  outerRadius={window.innerWidth < 768 ? 70 : 100}
+                  innerRadius={window.innerWidth < 768 ? 30 : 40}
                   fill="#8884d8"
                   dataKey="value"
                   paddingAngle={2}
@@ -144,15 +147,17 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ projects }) => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-6 w-full px-2">
-            <div className="flex flex-wrap justify-center gap-3">
+          <div className="mt-4 sm:mt-6 w-full px-1 sm:px-2">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {themeChartData.map((entry, index) => (
-                <div key={`legend-${index}`} className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-md shadow-sm">
+                <div key={`legend-${index}`} className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-50 rounded-md shadow-sm">
                   <div 
-                    className="w-4 h-4 rounded-full" 
+                    className="w-3 h-3 sm:w-4 sm:h-4 rounded-full" 
                     style={{ backgroundColor: COLORS[index % COLORS.length] }} 
                   />
-                  <span className="text-sm font-medium">{entry.name} ({entry.value})</span>
+                  <span className="text-xs sm:text-sm font-medium truncate max-w-[120px]" title={`${entry.name} (${entry.value})`}>
+                    {entry.name.length > 15 ? entry.name.substring(0, 12) + '...' : entry.name} ({entry.value})
+                  </span>
                 </div>
               ))}
             </div>
@@ -161,30 +166,31 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ projects }) => {
       </Card>
 
       <Card className="col-span-1 lg:col-span-2">
-        <CardHeader className="pb-2">
-          <CardTitle>Projects by Organization Unit (Top 5)</CardTitle>
+        <CardHeader className="pb-1 sm:pb-2">
+          <CardTitle className="text-base sm:text-lg">Projects by Organization Unit (Top 5)</CardTitle>
         </CardHeader>
-        <CardContent className="h-[380px]">
+        <CardContent className="h-[300px] sm:h-[350px] md:h-[380px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={orgUnitChartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+              margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
               layout="vertical"
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
+              <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
+              <XAxis type="number" tick={{ fontSize: 10 }} />
               <YAxis 
                 type="category" 
                 dataKey="name" 
-                width={180} 
-                tick={{ fontSize: 12 }}
+                width={120}
+                tick={{ fontSize: 10 }}
                 tickFormatter={(value) => {
-                  // Truncate long organization unit names if needed
-                  return value.length > 25 ? value.substring(0, 22) + '...' : value;
+                  // Truncate long organization unit names based on screen size
+                  const maxLength = window.innerWidth < 640 ? 15 : window.innerWidth < 1024 ? 20 : 25;
+                  return value.length > maxLength ? value.substring(0, maxLength - 3) + '...' : value;
                 }}
               />
               <Tooltip formatter={(value) => [`${value} Projects`, 'Count']} />
-              <Legend wrapperStyle={{ paddingTop: 10 }} />
+              <Legend wrapperStyle={{ paddingTop: 5, fontSize: 12 }} />
               <Bar dataKey="count" name="Projects" fill="#0967AA" />
             </BarChart>
           </ResponsiveContainer>

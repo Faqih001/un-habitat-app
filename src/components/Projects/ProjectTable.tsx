@@ -106,29 +106,33 @@ const ProjectTable: React.FC<ProjectTableProps> = ({
           </div>
         </div>
         
-        <div className="border rounded-md overflow-hidden">
+        <div className="border rounded-md overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="w-[50px]">ID</TableHead>
-                <TableHead className="w-[300px]">Title</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead>Lead Org Unit</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-[120px]">Budget</TableHead>
-                <TableHead className="text-right w-[140px]">Actions</TableHead>
+                <TableHead className="w-[50px] hidden sm:table-cell">ID</TableHead>
+                <TableHead className="min-w-[200px]">Title</TableHead>
+                <TableHead className="hidden md:table-cell">Country</TableHead>
+                <TableHead className="hidden lg:table-cell">Lead Org Unit</TableHead>
+                <TableHead className="min-w-[90px]">Status</TableHead>
+                <TableHead className="w-[100px] hidden sm:table-cell">Budget</TableHead>
+                <TableHead className="text-right w-[100px] sm:w-[140px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedProjects.map((project) => (
                 <TableRow key={project.ProjectID}>
-                  <TableCell className="font-medium">{project.ProjectID}</TableCell>
-                  <TableCell>{project.ProjectTitle}</TableCell>
-                  <TableCell>{project.Countries?.split('; ')[0] || ''}</TableCell>
-                  <TableCell>{project.LeadOrgUnit}</TableCell>
+                  <TableCell className="font-medium hidden sm:table-cell">{project.ProjectID}</TableCell>
+                  <TableCell>
+                    <div className="max-w-[200px] sm:max-w-[300px] truncate" title={project.ProjectTitle}>
+                      {project.ProjectTitle}
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">{project.Countries?.split('; ')[0] || ''}</TableCell>
+                  <TableCell className="hidden lg:table-cell">{project.LeadOrgUnit}</TableCell>
                   <TableCell>
                     <span 
-                      className={`inline-block px-2 py-1 rounded text-xs ${
+                      className={`inline-block px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs ${
                         project.ApprovalStatus === 'Approved' 
                           ? 'bg-green-100 text-green-800' 
                           : project.ApprovalStatus === 'Pending' 
@@ -139,30 +143,33 @@ const ProjectTable: React.FC<ProjectTableProps> = ({
                       {project.ApprovalStatus}
                     </span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden sm:table-cell">
                     ${project.PAGValue?.toLocaleString() || '0'}
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end space-x-1">
+                  <TableCell className="text-right py-1">
+                    <div className="flex justify-end space-x-0 sm:space-x-1">
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
+                        className="h-8 w-8 p-0"
                         onClick={() => onView(project)}
                         title="View details"
                       >
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-3.5 w-3.5" />
                       </Button>
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
+                        className="h-8 w-8 p-0"
                         onClick={() => onEdit(project)}
                         title="Edit project"
                       >
-                        <Edit className="h-4 w-4" />
+                        <Edit className="h-3.5 w-3.5" />
                       </Button>
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
+                        className="h-8 w-8 p-0"
                         onClick={() => confirmDelete(project)}
                         title="Delete project"
                       >
@@ -184,26 +191,28 @@ const ProjectTable: React.FC<ProjectTableProps> = ({
         </div>
         
         {/* Pagination controls */}
-        <div className="flex justify-between items-center mt-4">
-          <div className="text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
+          <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
             Showing {Math.min((page - 1) * pageSize + 1, projects.length)} to{" "}
             {Math.min(page * pageSize, projects.length)} of {projects.length} entries
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <Button
               variant="outline"
               size="sm"
+              className="text-xs sm:text-sm h-8 px-2 sm:px-3"
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
             >
-              Previous
+              Prev
             </Button>
-            <div className="text-sm">
-              Page {page} of {totalPages || 1}
+            <div className="text-xs sm:text-sm px-1">
+              {page} / {totalPages || 1}
             </div>
             <Button
               variant="outline"
               size="sm"
+              className="text-xs sm:text-sm h-8 px-2 sm:px-3"
               onClick={() => handlePageChange(page + 1)}
               disabled={page >= totalPages}
             >

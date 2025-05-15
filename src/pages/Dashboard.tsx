@@ -15,13 +15,13 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
         </div>
         
         {isLoadingProjects ? (
-          <div className="text-center py-12">
+          <div className="text-center py-8 sm:py-12">
             <div className="animate-pulse">Loading dashboard data...</div>
           </div>
         ) : (

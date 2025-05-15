@@ -17,33 +17,37 @@ const DashboardRecentProjects: React.FC<DashboardRecentProjectsProps> = ({ proje
     .slice(0, 5); // Take only the 5 most recent
 
   return (
-    <Card className="mt-6">
-      <CardHeader>
-        <CardTitle>Recently Started Projects</CardTitle>
+    <Card className="mt-4 sm:mt-6">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base sm:text-lg">Recently Started Projects</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto -mx-4 sm:-mx-6 px-4 sm:px-6">
+          <table className="w-full text-xs sm:text-sm">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-3 px-2">Project Title</th>
-                <th className="text-left py-3 px-2">Country</th>
-                <th className="text-left py-3 px-2">Status</th>
-                <th className="text-left py-3 px-2">Start Date</th>
-                <th className="text-right py-3 px-2">Budget</th>
+                <th className="text-left py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap">Project Title</th>
+                <th className="text-left py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap hidden sm:table-cell">Country</th>
+                <th className="text-left py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap">Status</th>
+                <th className="text-left py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap hidden md:table-cell">Start Date</th>
+                <th className="text-right py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap">Budget</th>
               </tr>
             </thead>
             <tbody>
               {recentProjects.length > 0 ? (
                 recentProjects.map((project) => (
                   <tr key={project.ProjectID} className="border-b">
-                    <td className="py-3 px-2">
-                      {project.ProjectTitle}
+                    <td className="py-2 sm:py-3 px-1 sm:px-2 max-w-[200px]">
+                      <div className="truncate" title={project.ProjectTitle}>
+                        {project.ProjectTitle}
+                      </div>
                     </td>
-                    <td className="py-3 px-2">{project.Countries?.split('; ')[0] || ''}</td>
-                    <td className="py-3 px-2">
+                    <td className="py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap hidden sm:table-cell">
+                      {project.Countries?.split('; ')[0] || ''}
+                    </td>
+                    <td className="py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap">
                       <span 
-                        className={`inline-block px-2 py-0.5 rounded text-xs ${
+                        className={`inline-block px-1 sm:px-2 py-0.5 rounded text-xs ${
                           project.ApprovalStatus === 'Approved' 
                             ? 'bg-green-100 text-green-800' 
                             : project.ApprovalStatus === 'Pending' || project.ApprovalStatus === 'Pending Approval'
@@ -54,14 +58,14 @@ const DashboardRecentProjects: React.FC<DashboardRecentProjectsProps> = ({ proje
                         {project.ApprovalStatus}
                       </span>
                     </td>
-                    <td className="py-3 px-2">{project.StartDate ? new Date(project.StartDate).toLocaleDateString() : 'N/A'}</td>
-                    <td className="py-3 px-2 text-right">${typeof project.PAGValue === 'number' ? project.PAGValue.toLocaleString() : '0'}</td>
+                    <td className="py-2 sm:py-3 px-1 sm:px-2 whitespace-nowrap hidden md:table-cell">{project.StartDate ? new Date(project.StartDate).toLocaleDateString() : 'N/A'}</td>
+                    <td className="py-2 sm:py-3 px-1 sm:px-2 text-right whitespace-nowrap">${typeof project.PAGValue === 'number' ? project.PAGValue.toLocaleString() : '0'}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="py-6 text-center text-gray-500">
-                    No projects found
+                  <td colSpan={5} className="py-4 text-center text-gray-500">
+                    No recent projects found
                   </td>
                 </tr>
               )}

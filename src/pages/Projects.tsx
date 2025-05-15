@@ -187,18 +187,18 @@ const Projects = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <h1 className="text-3xl font-bold">Projects</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+          <h1 className="text-2xl sm:text-3xl font-bold">Projects</h1>
           <Button 
             onClick={handleNewProject}
-            className="bg-un-blue hover:bg-un-blue-dark"
+            className="bg-un-blue hover:bg-un-blue-dark w-full sm:w-auto text-sm sm:text-base"
           >
             Add New Project
           </Button>
         </div>
         
-        <div className="bg-white p-4 rounded-lg shadow">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-3 sm:p-4 rounded-lg shadow">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <div>
               <label htmlFor="search" className="text-sm font-medium mb-1 block">Search</label>
               <Input
@@ -266,7 +266,7 @@ const Projects = () => {
         
         {/* Project Form Dialog */}
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-          <DialogContent className="sm:max-w-[700px]">
+          <DialogContent className="w-[calc(100%-2rem)] max-w-[calc(100vw-2rem)] sm:max-w-[700px]">
             <ProjectForm
               project={currentProject ? {
                 ProjectTitle: currentProject.ProjectTitle,
@@ -291,7 +291,7 @@ const Projects = () => {
         
         {/* Project Details Dialog */}
         <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
-          <DialogContent className="sm:max-w-[700px]">
+          <DialogContent className="w-[calc(100%-2rem)] max-w-[calc(100vw-2rem)] sm:max-w-[700px]">
             {currentProject && (
               <ProjectDetails
                 project={currentProject}

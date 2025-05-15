@@ -41,29 +41,29 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ projects }) => {
   }, {} as Record<string, number>);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      <Card className="overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
             Total Projects
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">{totalProjects}</div>
+        <CardContent className="pt-1 sm:pt-2">
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold">{totalProjects}</div>
           <p className="text-xs text-muted-foreground">
             Across {totalCountries} countries
           </p>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+      <Card className="overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
             Total Budget
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold truncate" title={`$${totalBudget.toLocaleString()}`}>
+        <CardContent className="pt-1 sm:pt-2">
+          <div className="text-xl sm:text-2xl font-bold truncate" title={`$${totalBudget.toLocaleString()}`}>
             ${!isNaN(totalBudget) ? (totalBudget / 1000000).toFixed(2) : 0}M
           </div>
           <p className="text-xs text-muted-foreground">
@@ -72,14 +72,14 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ projects }) => {
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+      <Card className="overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
             Approved Projects
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">
+        <CardContent className="pt-1 sm:pt-2">
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold">
             {statusCounts['Approved'] || 0}
           </div>
           <p className="text-xs text-muted-foreground">
@@ -88,14 +88,14 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ projects }) => {
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+      <Card className="overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between pb-1 sm:pb-2">
+          <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
             Pending Projects
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">
+        <CardContent className="pt-1 sm:pt-2">
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold">
             {statusCounts['Pending'] || 0}
           </div>
           <p className="text-xs text-muted-foreground">
