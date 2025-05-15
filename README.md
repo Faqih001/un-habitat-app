@@ -1,44 +1,123 @@
-# UN-Habitat Web Developer Intern Assessment (Next.js & MySQL)
+# UN-Habitat Project Management Dashboard
 
-This repository contains the solution for the UN-Habitat Web Developer Intern Practical Assessment, built with Next.js and MySQL.
+![UN-Habitat Logo](https://unhabitat.org/sites/default/files/2020/06/un-habitat-logo-oct2019.png)
+
+A full-stack application for managing and visualizing UN-Habitat projects, built with React, Vite, TypeScript, Express, and MySQL. This comprehensive dashboard provides tools for project management, data visualization, and analysis of UN-Habitat initiatives around the world.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
+- [Running the Application](#running-the-application)
+- [Data Management](#data-management)
+- [API Documentation](#api-documentation)
+- [Project Highlights](#project-highlights)
+- [Future Enhancements](#future-enhancements)
+
+## Features
+
+- **Interactive Dashboard**
+  - Visual analytics with charts and graphs for project distribution
+  - Statistics by country, theme, and organizational unit
+  - Summary metrics for project counts, budgets, and statuses
+  
+- **Comprehensive Project Management**
+  - Full CRUD operations (Create, Read, Update, Delete)
+  - Filtering by approval status, country, and search terms
+  - Detailed project views with all associated information
+  
+- **Data Visualization**
+  - Bar charts for geographic and organizational distribution
+  - Pie charts for thematic analysis
+  - Interactive legends and tooltips for enhanced data exploration
+  
+- **Robust Backend System**
+  - RESTful API architecture
+  - Relational database design with proper normalization
+  - Automatic data import from Excel sources
+  
+- **Responsive UI**
+  - Mobile-friendly interface using modern design principles
+  - Consistent styling across all components
+  - Accessible UI elements following best practices
+
+## Technology Stack
+
+### Frontend
+- **React 18+**: Modern component-based UI library
+- **TypeScript**: Type-safe JavaScript superset
+- **Vite**: Next-generation frontend tooling
+- **Recharts**: Composable charting library for React
+- **TanStack Query**: Data fetching and caching library
+- **Shadcn UI**: Beautifully designed components built with Radix UI
+- **Tailwind CSS**: Utility-first CSS framework
+
+### Backend
+- **Node.js**: JavaScript runtime
+- **Express**: Web framework for Node.js
+- **MySQL**: Relational database
+- **mysql2**: Modern MySQL client for Node.js
+- **XLSX**: Library for parsing Excel files
+
+### Development Tools
+- **ESLint**: Code linting
+- **Concurrently**: Run multiple commands concurrently
+- **Nodemon**: Monitor for changes and restart server
 
 ## Project Structure
 
-- `app/page.jsx`: Main page with project list, CRUD operations, and project view.
-- `app/dashboard/page.jsx`: Dashboard with visualizations using Recharts.
-- `app/api/*`: API routes for projects, countries, themes, and donors.
-- `init-db.sql`: MS SQL Server compatible script to initialize the database with normalized tables and sample data.
-- `mysql-init-db.sql`: MySQL specific script to initialize the database with normalized tables and sample data.
-- `setup-db-cli.js`: Interactive CLI tool to set up either MySQL or MS SQL Server databases.
-- `setup-and-import.js`: Combined script to set up database and import Excel data.
-- `import-excel-to-mysql.js`: Script to import data from Excel into MySQL.
-- `setup-database.js`: Script to create database tables from SQL script.
-- `setup-excel-file.js`: Script to prepare the Excel file for import.
+```
+un-habitat-app/
+├── db/                        # Database connection module
+├── public/                    # Public assets and Excel data file
+├── routes/                    # Backend API routes
+│   └── api/                   # API endpoints
+│       ├── countries.js
+│       ├── donors.js
+│       ├── projects.js
+│       └── themes.js
+├── src/                       # Frontend source code
+│   ├── components/            # React components
+│   │   ├── Dashboard/         # Dashboard-related components
+│   │   ├── Layout/            # Layout components
+│   │   ├── Projects/          # Project management components
+│   │   └── ui/                # UI components (Shadcn)
+│   ├── hooks/                 # Custom React hooks
+│   ├── lib/                   # Utility functions
+│   ├── pages/                 # Page components
+│   └── services/              # API service layer
+├── .env.local                 # Environment variables
+├── import-excel-to-mysql.js   # Data import script
+├── package.json               # Project dependencies
+├── server.js                  # Express server entry point
+├── setup-database.js          # Database setup script
+├── setup-server.sh            # Server setup shell script
+├── start-app.sh               # Application startup script
+└── unhabitat.sql              # Database dump file
+```
+
+## Prerequisites
+
+- Node.js (v16+)
+- MySQL (v8+)
+- npm or yarn
+- bash shell (for setup scripts)
 
 ## Setup Instructions
 
-### Prerequisites
-
-- Node.js (v16 or later)
-- MySQL (v8 or later) and/or MS SQL Server
-- Git
-
-### Clone the Repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/unhabitat-assessment-nextjs.git
-cd unhabitat-assessment-nextjs
+git clone https://github.com/yourusername/un-habitat-app.git
+cd un-habitat-app
 ```
 
-### Install Dependencies
+### 2. Configure Environment Variables
 
-```bash
-npm install
-```
-
-### Configure Environment Variables
-
-Create a `.env.local` file in the project root:
+Create a `.env.local` file in the project root with your MySQL credentials:
 
 ```bash
 DB_HOST=localhost
@@ -47,120 +126,155 @@ DB_PASSWORD=your_password
 DB_NAME=unhabitat
 ```
 
-### Set Up the Database and Import Data
-
-You have several options to set up the database and import the Excel data:
-
-#### Using the interactive CLI tool (recommended)
+### 3. Install Frontend Dependencies
 
 ```bash
-# Run the interactive database setup CLI
-npm run db-setup
-
-# This will guide you through:
-# - Choosing between MySQL and MS SQL Server
-# - Setting up the database structure
-# - Optionally importing Excel data (for MySQL)
+npm install
 ```
 
-#### Using npm scripts
+### 4. Setup Backend
+
+Run the server setup script to install backend dependencies:
 
 ```bash
-# Prepare the Excel file for import
-npm run setup-excel
-
-# One-step setup and import
-npm run setup-all
-
-# Or step-by-step:
-npm run setup-db     # Set up database structure
-npm run import-excel # Import Excel data
+./setup-server.sh
 ```
 
-#### Using Node.js directly
+Follow the prompts to:
+
+- Install server dependencies
+- Set up the database schema
+- Import data from Excel
+
+Alternatively, you can restore the database from the provided SQL dump:
 
 ```bash
-# One-step setup and import
-node setup-and-import.js
-
-# Or step-by-step:
-node setup-database.js
-node import-excel-to-mysql.js
+mysql -u root -p < unhabitat.sql
 ```
 
-#### Using raw SQL
+## Running the Application
+
+### Development Mode (Frontend + Backend)
 
 ```bash
-mysql -u root -p unhabitat < init-db.sql
+npm run dev:full
 ```
 
-For more detailed instructions, see:
-
-- `IMPORT_GUIDE.md` - Brief guide for Excel data import
-- `EXCEL_IMPORT_SETUP.md` - Comprehensive guide for setting up the Excel import process
-
-### Run the Application
+### Run Frontend Only
 
 ```bash
 npm run dev
 ```
 
-Access the application at [`http://localhost:3000`](http://localhost:3000).
-
-## Accessing the Application
-
-- **Project List**: View, add, edit, or delete projects with pagination ([`http://localhost:3000`](http://localhost:3000)).
-- **Dashboard**: Visualize projects by country, lead org unit, and themes ([`http://localhost:3000/dashboard`](http://localhost:3000/dashboard)).
-- **API Endpoints**:
-  - GET `/api/projects/all`: List all projects.
-  - GET `/api/projects/country/[country]`: Filter by country (e.g., `/api/projects/country/Kenya`).
-  - GET `/api/projects/approvalStatus/[status]`: Filter by approval status (e.g., `/api/projects/approvalStatus/Approved`).
-  - POST `/api/projects`: Create a new project.
-  - PUT `/api/projects/[id]`: Update a project.
-  - DELETE `/api/projects/[id]`: Delete a project.
-
-## Notes
-
-- **Data Normalization**: The Excel data is normalized into seven tables to handle many-to-many relationships (projects, countries, themes, donors, project_countries, project_themes, project_donors).
-- **CRUD Interface**: Implemented for the projects table with a user-friendly interface.
-- **Pagination**: Supports 5, 10, 20, 50, or all rows per page with a clear pager.
-- **API**: Provides JSON endpoints as specified, with filtering capabilities.
-- **Dashboard**: Displays bar charts for top 10 countries, lead org units, and themes, with an interesting fact about the country with the most projects.
-- **Data Import**: The application includes scripts to import data from the provided Excel file.
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+### Run Backend Only
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run server
 ```
 
-Open [`http://localhost:3000`](http://localhost:3000) with your browser to see the result.
+### Access the Application
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **API**: [http://localhost:3001/api](http://localhost:3001/api)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data Management
 
-## Learn More
+### Importing Data from Excel
 
-To learn more about Next.js, take a look at the following resources:
+To import data from Excel:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Place the Excel file at `public/Application Development - Exam Data.xlsx`
+2. Run the import script:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run import-data
+```
 
-## Deploy on Vercel
+### Database Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To set up the database schema without importing data:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run setup-db
+```
+
+To do both steps in one command:
+
+```bash
+npm run setup-and-import
+```
+
+### Creating a Database Dump
+
+To create a MySQL dump of the database:
+
+```bash
+mysqldump -h localhost -u root -p unhabitat > unhabitat.sql
+```
+
+## API Documentation
+
+### Projects
+
+- `GET /api/projects/all` - Get all projects (optionally paginated)
+- `GET /api/projects/:id` - Get project by ID
+- `GET /api/projects/country/:country` - Get projects by country
+- `GET /api/projects/status/:status` - Get projects by approval status
+- `POST /api/projects` - Create new project
+- `PUT /api/projects/:id` - Update project
+- `DELETE /api/projects/:id` - Delete project
+
+### Countries, Themes, Donors
+
+- `GET /api/countries` - Get all countries
+- `GET /api/countries/:name/projects` - Get projects for a country
+- `GET /api/themes` - Get all themes
+- `GET /api/themes/:name/projects` - Get projects for a theme
+- `GET /api/donors` - Get all donors
+- `GET /api/donors/:name/projects` - Get projects for a donor
+
+## Project Highlights
+
+### Database Design
+
+The application uses a carefully designed relational database schema that supports many-to-many relationships:
+
+- Projects can be associated with multiple countries, themes, and donors
+- Normalized structure ensures data integrity and minimizes redundancy
+
+### Data Visualization
+
+The dashboard features dynamic charts built with Recharts:
+
+- Bar charts showing project distribution by country
+- Pie charts displaying thematic analysis
+- Horizontal bar charts for organizational units
+
+### Form Validation
+
+All project management forms implement:
+
+- Field validation using Zod schema
+- Error reporting with user-friendly messages
+- Data type enforcement
+
+### API Architecture
+
+The backend follows RESTful principles:
+
+- Resource-based endpoints
+- HTTP verbs for CRUD operations
+- JSON responses with appropriate status codes
+
+## Future Enhancements
+
+- User authentication and authorization
+- Advanced filtering and sorting options
+- Export functionality to multiple formats
+- Dark/light theme toggle
+- Unit and integration tests
+- Deployment pipeline
+
+---
+
+Developed by [Your Name] as a demonstration of full-stack development skills, data visualization, and project management capabilities.

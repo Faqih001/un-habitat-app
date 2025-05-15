@@ -1,8 +1,17 @@
-const XLSX = require('xlsx');
-const mysql = require('mysql2/promise');
-const path = require('path');
-const fs = require('fs');
-require('dotenv').config({ path: '.env.local' });
+// import-excel-to-mysql.js - Script to import Excel data to MySQL
+import XLSX from 'xlsx';
+import mysql from 'mysql2/promise';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Configure __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables
+dotenv.config({ path: '.env.local' });
 
 // Database connection configuration
 const dbConfig = {
@@ -17,7 +26,7 @@ const parseDate = (date) => {
   if (!date) return null;
   // Handle Excel date formats (e.g., "1-Jan-11" or numeric serial dates)
   if (typeof date === 'number') {
-    const excelEpoch = new Date(1899, 11, 30); // Excel's epoch (Dec 30, 1899)
+    const excelEpoch = new Date(1899, 11, 30);
     return new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
   }
   const parsed = new Date(date);
@@ -35,9 +44,7 @@ async function importExcelToMySQL() {
   try {
     // Try different paths for the Excel file
     const possiblePaths = [
-      path.join(__dirname, 'public', 'Application Development - Exam Data.xlsx'),
-      path.join(__dirname, 'Application Development - Exam Data.xlsx'),
-      '/home/amirul/Desktop/Interviews/UN-Habitat PLGS Information Technology Test/un_habitat_app/un-habitat-app/public/Application Development - Exam Data.xlsx'
+      path.join(__dirname, 'public', 'Application Development - Exam Data.xlsx')
     ];
 
     let filePath;
@@ -49,7 +56,7 @@ async function importExcelToMySQL() {
     }
 
     if (!filePath) {
-      throw new Error(`Excel file not found in any of the possible paths: ${possiblePaths.join(', ')}`);
+      throw new Error('Excel file not found in any of the expected locations');
     }
 
     console.log(`Reading Excel file from: ${filePath}`);
@@ -63,7 +70,7 @@ async function importExcelToMySQL() {
     
     // Log the first row to verify column names
     if (data.length > 0) {
-      console.log('Excel column headers:', Object.keys(data[0]));
+      console.log('First row column names:', Object.keys(data[0]));
     }
 
     // Connect to MySQL
@@ -80,73 +87,92 @@ async function importExcelToMySQL() {
 
     // Process each row
     for (const row of data) {
-      // Map Excel columns to database fields (adjust column names as per your Excel file)
-      const project = {
-        ProjectID: row['ProjectID']?.toString() || '',
-        ProjectTitle: row['Project Title'] || '',
-        PAASCode: row['PAAS Code'] || '',
-        ApprovalStatus: row['Approval Status'] || '',
-        Fund: row['Fund'] || '',
-        PAGValue: parseFloat(row['PAG Value']) || 0,
-        StartDate: parseDate(row['Start Date']),
-        EndDate: parseDate(row['End Date']),
-        LeadOrgUnit: row['Lead Org Unit'] || '',
-        TotalExpenditure: parseFloat(row['Total Expenditure']) || 0,
-        TotalContribution: parseFloat(row['Total Contribution']) || 0,
-        TotalPSC: parseFloat(row['Total PSC']) || 0,
-        countries: splitMultiValue(row['Country(ies)']),
-        themes: splitMultiValue(row['Theme(s)']),
-        donors: splitMultiValue(row['Donor(s)'])
-      };
-
-      // Skip invalid rows
-      if (!project.ProjectID || !project.ProjectTitle) {
-        console.warn(`Skipping row with missing ProjectID or ProjectTitle: ${JSON.stringify(row)}`);
+      // Skip rows without ProjectID
+      if (!row.ProjectID) {
+        console.warn('Skipping row without ProjectID:', row);
         continue;
       }
 
-      console.log(`Processing project: ${project.ProjectID} - ${project.ProjectTitle}`);
-
-      // Insert into projects table
       try {
-        await connection.execute(
-          `INSERT IGNORE INTO projects (ProjectID, ProjectTitle, PAASCode, ApprovalStatus, Fund, PAGValue, StartDate, EndDate, LeadOrgUnit, TotalExpenditure, TotalContribution, TotalPSC) 
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            project.ProjectID,
-            project.ProjectTitle,
-            project.PAASCode,
-            project.ApprovalStatus,
-            project.Fund,
-            project.PAGValue,
-            project.StartDate,
-            project.EndDate,
-            project.LeadOrgUnit,
-            project.TotalExpenditure,
-            project.TotalContribution,
-            project.TotalPSC
-          ]
+        // Insert project data
+        const projectData = {
+          ProjectID: row.ProjectID,
+          ProjectTitle: row["Project Title"] || null,
+          PAASCode: row["PAAS Code"] || null,
+          ApprovalStatus: row["Approval Status"] || null,
+          Fund: row.Fund || null,
+          PAGValue: row["PAG Value"] || null,
+          StartDate: parseDate(row["Start Date"]) || null,
+          EndDate: parseDate(row["End Date"]) || null,
+          LeadOrgUnit: row["Lead Org Unit"] || null,
+          TotalExpenditure: row["Total Expenditure"] || null,
+          TotalContribution: row["Total Contribution"] || null,
+          TotalPSC: row["Total PSC"] || null
+        };
+
+        // Insert project
+        await connection.query(
+          'INSERT INTO projects SET ? ON DUPLICATE KEY UPDATE ?',
+          [projectData, projectData]
         );
-
-        // Insert countries
-        for (const country of project.countries) {
-          await connection.execute(`INSERT IGNORE INTO countries (CountryName) VALUES (?)`, [country]);
-          await connection.execute(`INSERT IGNORE INTO project_countries (ProjectID, CountryName) VALUES (?, ?)`, [project.ProjectID, country]);
+        
+        // Process countries
+        if (row["Country(ies)"]) {
+          const countries = splitMultiValue(row["Country(ies)"]);
+          for (const country of countries) {
+            // Insert country if it doesn't exist
+            await connection.query(
+              'INSERT IGNORE INTO countries (CountryName) VALUES (?)',
+              [country]
+            );
+            
+            // Insert project-country relationship
+            await connection.query(
+              'INSERT IGNORE INTO project_countries (ProjectID, CountryName) VALUES (?, ?)',
+              [row.ProjectID, country]
+            );
+          }
         }
-
-        // Insert themes
-        for (const theme of project.themes) {
-          await connection.execute(`INSERT IGNORE INTO themes (ThemeName) VALUES (?)`, [theme]);
-          await connection.execute(`INSERT IGNORE INTO project_themes (ProjectID, ThemeName) VALUES (?, ?)`, [project.ProjectID, theme]);
+        
+        // Process themes
+        if (row["Theme(s)"]) {
+          const themes = splitMultiValue(row["Theme(s)"]);
+          for (const theme of themes) {
+            // Insert theme if it doesn't exist
+            await connection.query(
+              'INSERT IGNORE INTO themes (ThemeName) VALUES (?)',
+              [theme]
+            );
+            
+            // Insert project-theme relationship
+            await connection.query(
+              'INSERT IGNORE INTO project_themes (ProjectID, ThemeName) VALUES (?, ?)',
+              [row.ProjectID, theme]
+            );
+          }
         }
-
-        // Insert donors
-        for (const donor of project.donors) {
-          await connection.execute(`INSERT IGNORE INTO donors (DonorName) VALUES (?)`, [donor]);
-          await connection.execute(`INSERT IGNORE INTO project_donors (ProjectID, DonorName) VALUES (?, ?)`, [project.ProjectID, donor]);
+        
+        // Process donors
+        if (row["Donor(s)"]) {
+          const donors = splitMultiValue(row["Donor(s)"]);
+          for (const donor of donors) {
+            // Insert donor if it doesn't exist
+            await connection.query(
+              'INSERT IGNORE INTO donors (DonorName) VALUES (?)',
+              [donor]
+            );
+            
+            // Insert project-donor relationship
+            await connection.query(
+              'INSERT IGNORE INTO project_donors (ProjectID, DonorName) VALUES (?, ?)',
+              [row.ProjectID, donor]
+            );
+          }
         }
-      } catch (err) {
-        console.error(`Error inserting project ${project.ProjectID}:`, err.message);
+        
+        console.log(`Imported project: ${row.ProjectID} - ${row["Project Title"]?.substring(0, 30)}...`);
+      } catch (error) {
+        console.error(`Error importing project ${row.ProjectID}:`, error.message);
       }
     }
 
@@ -155,32 +181,24 @@ async function importExcelToMySQL() {
     console.log('Data imported successfully!');
     return true;
   } catch (error) {
-    console.error('Error importing data:', error);
+    console.error('Error during import:', error);
     if (connection) {
-      try {
-        await connection.rollback();
-        console.log('Transaction rolled back');
-      } catch (rollbackError) {
-        console.error('Error rolling back transaction:', rollbackError);
-      }
+      await connection.rollback();
+      console.log('Transaction rolled back due to error');
     }
     return false;
   } finally {
     if (connection) {
-      try {
-        await connection.end();
-        console.log('Database connection closed');
-      } catch (disconnectError) {
-        console.error('Error closing database connection:', disconnectError);
-      }
+      await connection.end();
+      console.log('Database connection closed');
     }
   }
 }
 
 // If this file is run directly, execute the import
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   importExcelToMySQL();
 }
 
 // Export the function for use in other scripts
-module.exports = importExcelToMySQL; 
+export default importExcelToMySQL;
