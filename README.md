@@ -626,4 +626,4 @@ This project demonstrates expertise across the full web development stack, from 
 
 ---
 
-Developed as a showcase of full-stack development skills, data visualization capabilities, and project management expertise using modern JavaScript/TypeScript technologies.
+Developed as a showcase of full-stack development skills, data visualization capabilities, and project management expertise using modern JavaScript/TypeScript technologies by Fakii Mohammed.
